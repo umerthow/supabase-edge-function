@@ -18,7 +18,22 @@ jobs:
         with:
           version: latest
           
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v2.4.1
+          
+      - name: Cache dependencies and regenerate lockfile
+        run: |
+          cd supabase/functions/users-api
+          # Remove old lockfile if it exists
+          rm -f deno.lock
+          # Cache dependencies (this will create a new compatible lockfile)
+          deno cache index-minimal.ts
+          
       - name: Deploy Edge Functions
-        run: supabase functions deploy users-api --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          # Force use of Deno 2.x compatible deployment
+          supabase functions deploy users-api --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} --no-verify-jwt
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

@@ -8,8 +8,12 @@ import { bodyLimit } from "hono/body-limit";
 
 import { loadEnv } from "./config/env.ts";
 
-// Load environment variables first
-await loadEnv();
+// Load environment variables first (only in local development)
+try {
+  await loadEnv();
+} catch (error) {
+  console.log("Environment loading skipped (likely in production):", error);
+}
 
 // Then import modules that depend on environment variables
 import userRoutes from "./routes/user.routes.ts";
@@ -33,22 +37,20 @@ app.use(
 );
 
 // Routes
-app.get("/", (c: Context) =>
+app.get("/users-api", (c: Context) =>
   c.json({
     message: "Deno Hono API on Supabase Edge Functions",
     timestamp: new Date().toISOString(),
   }));
 
-app.get("/health", (c: Context) =>
+app.get("/users-api/health", (c: Context) =>
   c.json({
     status: "ok",
     timestamp: new Date().toISOString(),
   }));
 
 // User routes
-app.route("/users", userRoutes);
+app.route("/users-api/users", userRoutes);
 
 // Handle all requests
-Deno.serve({
-  port:9000
-}, app.fetch);
+Deno.serve(app.fetch);

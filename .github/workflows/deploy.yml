@@ -5,29 +5,27 @@ on:
     branches:
       - main
       - master
-  workdir: supabase
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - uses: supabase/setup-cli@v1
         with:
           version: latest
-          
+
       - name: Setup Deno (Compatible with Supabase Edge Runtime)
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.45.2
-          
+
       - name: Prepare deployment
         run: |
-          rm -f deno.lock
-          # Don't cache - let Supabase handle it during deployment
-          
+          rm -f supabase/functions/users-api/deno.lock
+
       - name: Deploy Edge Functions
         run: |
           supabase functions deploy users-api --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} --no-verify-jwt

@@ -17,7 +17,15 @@ cp supabase/functions/users-api/index-direct-imports.ts supabase/functions/users
 
 echo "Deploying edge function without import map dependency..."
 cd supabase/functions/users-api
-npx supabase functions deploy users-api --no-verify-jwt --debug
+
+# Check if we're running in CI/CD
+if [ -n "$GITHUB_ACTIONS" ]; then
+  # In GitHub Actions
+  supabase functions deploy users-api --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt --debug
+else
+  # Local development
+  npx supabase functions deploy users-api --no-verify-jwt --debug
+fi
 
 # Restore the original index.ts
 echo "Restoring original index.ts..."

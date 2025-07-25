@@ -28,9 +28,15 @@ jobs:
           rm -rf ~/.cache/deno
           rm -rf ~/.cache/supabase
           rm -rf .supabase
+          
+      - name: Verify deno.json exists
+        run: |
+          ls -la supabase/functions/users-api/deno.json
+          cat supabase/functions/users-api/deno.json
+          echo "Ensuring deno.json is properly set up"
 
       - name: Deploy Edge Functions
         run: |
-          supabase functions deploy users-api --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} --no-verify-jwt
+          supabase functions deploy users-api --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} --no-verify-jwt --include-file supabase/functions/users-api/deno.json
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

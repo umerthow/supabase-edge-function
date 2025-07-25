@@ -27,22 +27,22 @@ for file in ${TYPESCRIPT_FILES}; do
   # Create a unique filename based on the directory structure
   flat_filename="${parent_dir}_${filename}"
   
-  echo "📄 Processing: $file -> ${TEMP_DIR}/${flat_filename}"
+  echo "📄 Processing: $file -> ${ORIGINAL_DIR}/${flat_filename}"
   
-  # Copy the file with the new flattened name
-  cp "$file" "${TEMP_DIR}/${flat_filename}"
+  # Copy the file with the new flattened name to original directory
+  cp "$file" "${ORIGINAL_DIR}/${flat_filename}"
 done
 
 # Update imports in all files
 echo "🔄 Updating imports in all files..."
 
 # First, update the main index.ts
-sed -i.bak "s|from \"@/config/env\"|from \"./config_env\"|g" "${TEMP_DIR}/index.ts"
-sed -i.bak "s|from \"@/routes/user\"|from \"./routes_user.routes\"|g" "${TEMP_DIR}/index.ts"
-sed -i.bak "s|from \"@/controllers/user\"|from \"./controllers_user.controller\"|g" "${TEMP_DIR}/index.ts"
+sed -i.bak "s|from \"@/config/env\"|from \"./config_env\"|g" "${ORIGINAL_DIR}/index.ts"
+sed -i.bak "s|from \"@/routes/user\"|from \"./routes_user.routes\"|g" "${ORIGINAL_DIR}/index.ts"
+sed -i.bak "s|from \"@/controllers/user\"|from \"./controllers_user.controller\"|g" "${ORIGINAL_DIR}/index.ts"
 
 # Then update all other files
-for file in ${TEMP_DIR}/*.ts; do
+for file in ${ORIGINAL_DIR}/*.ts; do
   echo "Updating imports in $file"
   
   # Replace path alias imports with flat imports
@@ -63,7 +63,7 @@ done
 
 # Copy deno.json without import mappings
 echo "📝 Creating simplified deno.json..."
-cat > "${TEMP_DIR}/deno.json" << EOF
+cat > "${ORIGINAL_DIR}/deno.json" << EOF
 {
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
@@ -82,12 +82,19 @@ cat > "${TEMP_DIR}/deno.json" << EOF
 }
 EOF
 
+# Remove subdirectories (after copying their contents)
+echo "🗑️ Removing subdirectories as they're no longer needed..."
+find "${ORIGINAL_DIR}" -mindepth 1 -type d -exec rm -rf {} +
+
 # Clean up backup files
-rm -f "${TEMP_DIR}"/*.bak
+rm -f "${ORIGINAL_DIR}"/*.bak
 
-echo "📋 Flattened files:"
-ls -la "${TEMP_DIR}"
+echo "📋 Flattened files in original directory:"
+ls -la "${ORIGINAL_DIR}"
 
-echo "🚀 Ready to deploy from ${TEMP_DIR}"
+echo "🚀 Ready to deploy from ${ORIGINAL_DIR}"
 echo "Run the following command to deploy:"
-echo "cd ${TEMP_DIR} && npx supabase functions deploy ${FUNCTION_NAME} --no-verify-jwt"
+echo "cd ${ORIGINAL_DIR} && npx supabase functions deploy ${FUNCTION_NAME} --no-verify-jwt"
+echo ""
+echo "To restore the original structure, run:"
+echo "rm -rf ${ORIGINAL_DIR}/* && cp -r ${BACKUP_DIR}/* ${ORIGINAL_DIR}/"

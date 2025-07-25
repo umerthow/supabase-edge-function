@@ -17,18 +17,9 @@ jobs:
         with:
           version: latest
 
-      - name: Setup Deno (Compatible with Supabase Edge Runtime)
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.45.2
+      - name: Link to Supabase Project
+        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} -p ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
-      - name: Prepare deployment (clean cache)
-        run: |
-          rm -f supabase/functions/users-api/deno.lock
-          rm -rf ~/.cache/deno
-          rm -rf ~/.cache/supabase
-          rm -rf .supabase
-          
       - name: Verify deno.json exists
         run: |
           ls -la supabase/functions/users-api/deno.json

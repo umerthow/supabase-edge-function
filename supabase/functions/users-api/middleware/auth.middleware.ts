@@ -1,5 +1,5 @@
 import { type Context, type Next } from "hono";
-import { supabase } from "../lib/client.ts";
+import { supabase } from "@/lib/client";
 
 export async function authMiddleware(c: Context, next: Next) {
   try {

@@ -3,7 +3,7 @@ import {
   UserLoginData,
   UserRegistrationData,
   UserService,
-} from "../services/user.service.ts";
+} from "@/services/user";
 
 export class UserController {
   static async register(c: Context) {

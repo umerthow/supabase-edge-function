@@ -7,7 +7,13 @@
     "hono/cors": "jsr:@hono/hono@^4.6.11/cors",
     "hono/body-limit": "jsr:@hono/hono@^4.6.11/body-limit",
     "hono/jwt": "jsr:@hono/hono@^4.6.11/jwt",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.1.0"
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.1.0",
+    "@/config/env": "./config/env.ts",
+    "@/routes/user": "./routes/user.routes.ts",
+    "@/controllers/user": "./controllers/user.controller.ts",
+    "@/middleware/auth": "./middleware/auth.middleware.ts",
+    "@/services/user": "./services/user.service.ts",
+    "@/lib/client": "./lib/client.ts"
   },
   "compilerOptions": {
     "lib": ["deno.window"],

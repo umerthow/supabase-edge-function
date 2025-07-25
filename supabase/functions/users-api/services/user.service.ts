@@ -1,4 +1,4 @@
-import { supabase } from "../lib/client.ts";
+import { supabase } from "@/lib/client";
 
 export interface UserRegistrationData {
   email: string;

@@ -6,7 +6,7 @@ import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { bodyLimit } from "hono/body-limit";
 
-import { loadEnv } from "./config/env.ts";
+import { loadEnv } from "@/config/env";
 
 // Load environment variables first (only in local development)
 try {
@@ -16,7 +16,7 @@ try {
 }
 
 // Then import modules that depend on environment variables
-import userRoutes from "./routes/user.routes.ts";
+import userRoutes from "@/routes/user";
 const app = new Hono();
 
 // Middleware

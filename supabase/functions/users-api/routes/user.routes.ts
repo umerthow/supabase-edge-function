@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { UserController } from "../controllers/user.controller.ts";
-import { authMiddleware } from "../middleware/auth.middleware.ts";
+import { UserController } from "@/controllers/user";
+import { authMiddleware } from "@/middleware/auth";
 
 const userRoutes = new Hono();
 

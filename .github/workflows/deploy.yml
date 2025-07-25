@@ -23,8 +23,9 @@ jobs:
       - name: Login to Supabase
         run: supabase login --token ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
-      - name: Link to Supabase Project
-        run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} -p ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      # Skip the database linking step since we only need to deploy the function
+      # - name: Link to Supabase Project
+      #   run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} -p ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
       - name: Verify deno.json exists
         run: |

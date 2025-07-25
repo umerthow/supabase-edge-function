@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - master
-  workflow_dispatch:
+  workdir: supabase
 
 jobs:
   deploy:
@@ -25,8 +25,6 @@ jobs:
           
       - name: Prepare deployment
         run: |
-          cd supabase/functions/users-api
-          # Remove lockfile to avoid version conflicts
           rm -f deno.lock
           # Don't cache - let Supabase handle it during deployment
           

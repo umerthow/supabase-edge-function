@@ -30,15 +30,13 @@ jobs:
           cat supabase/functions/users-api/deno.json
           echo "Ensuring deno.json is properly set up"
 
-      - name: Flatten directory and deploy
+      - name: Deploy Edge Functions
         run: |
-          # Create flattened directory structure
-          chmod +x ./scripts/flatten-directory.sh
-          ./scripts/flatten-directory.sh
-          
-          # Deploy from the flattened directory
-          cd /tmp/flattened-users-api
+          # Deploy directly from the original structure
+          cd supabase/functions/users-api
           ls -la
+          
+          # Deploy using the original index.ts
           supabase functions deploy users-api --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} --no-verify-jwt --debug
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

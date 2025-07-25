@@ -1,22 +1,21 @@
 #!/bin/bash
-# Script to flatten directory structure and deploy to Supabase Edge Functions
+# Script to flatten directory structure for Supabase Edge Functions deployment
 
 set -e # Exit on error
 
 FUNCTION_NAME="users-api"
 ORIGINAL_DIR="supabase/functions/${FUNCTION_NAME}"
-TEMP_DIR="/tmp/flattened-${FUNCTION_NAME}"
+BACKUP_DIR="/tmp/backup-${FUNCTION_NAME}"
 
-echo "🔧 Flattening directory structure for ${FUNCTION_NAME}..."
+echo "🔧 Creating backup of original function..."
 
-# Create clean temp directory
-rm -rf "${TEMP_DIR}"
-mkdir -p "${TEMP_DIR}"
+# Create backup directory
+rm -rf "${BACKUP_DIR}"
+mkdir -p "${BACKUP_DIR}"
 
-# Copy main file
-cp "${ORIGINAL_DIR}/index.ts" "${TEMP_DIR}/"
+# Backup all files
+cp -r "${ORIGINAL_DIR}"/* "${BACKUP_DIR}/"
 
-# Find all typescript files in subdirectories
 echo "📁 Finding all TypeScript files in subdirectories..."
 TYPESCRIPT_FILES=$(find "${ORIGINAL_DIR}" -name "*.ts" -not -path "${ORIGINAL_DIR}/index.ts")
 

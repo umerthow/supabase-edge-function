@@ -17,9 +17,6 @@ jobs:
         with:
           version: latest
 
-      - name: Clean existing functions
-        run: rm -rf supabase/functions/* || true
-
       - name: Login to Supabase
         run: supabase login --token ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
